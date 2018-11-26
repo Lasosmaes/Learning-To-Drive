@@ -15,7 +15,7 @@ class LEARNTODRIVEGAME_API UMyCarWheelFront : public UVehicleWheel
 	GENERATED_BODY()
 	
 public:
-	ULearnToDriveWheelFront();
+	UMyCarWheelFront();
 	
 	
 };

@@ -15,7 +15,7 @@ class LEARNTODRIVEGAME_API UMyCarWheelRear : public UVehicleWheel
 	GENERATED_BODY()
 
 public:
-	ULearnToDriveWheelRear();
+	UMyCarWheelRear();
 	
 	
 };

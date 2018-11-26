@@ -58,7 +58,7 @@ public:
 	void MoveForward(float Val);
 
 	/** Update the physics material used by the vehicle mesh */
-	void UpdatePhysicsMaterial();
+	/*void UpdatePhysicsMaterial();*/
 	/** Handle pressing right */
 	void MoveRight(float Val);
 	/** Handle handbrake pressed */

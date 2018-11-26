@@ -2,7 +2,7 @@
 
 #include "MyCarWheelFront.h"
 
-ULearnToDriveWheelFront::ULearnToDriveWheelFront()
+UMyCarWheelFront::UMyCarWheelFront()
 {
 	ShapeRadius = 35.f;
 	ShapeWidth = 10.0f;
