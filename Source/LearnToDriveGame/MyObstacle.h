@@ -11,11 +11,11 @@ class LEARNTODRIVEGAME_API AMyObstacle : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere)
+	/*UPROPERTY(VisibleAnywhere)
 		class UCapsuleComponent* triggerCapsule;
 
 	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* obstMesh;
+		class UStaticMeshComponent* obstMesh;*/
 
 
 public:	

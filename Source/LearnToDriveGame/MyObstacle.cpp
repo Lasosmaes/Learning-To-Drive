@@ -11,19 +11,15 @@ AMyObstacle::AMyObstacle()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//Collision Capsule
-	triggerCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Component"));
-	triggerCapsule->InitCapsuleSize(55.f, 96.0f);
-	triggerCapsule->SetCollisionProfileName("Trigger");
-	RootComponent = triggerCapsule;
+	////Collision Capsule
+	//triggerCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Component"));
+	//triggerCapsule->InitCapsuleSize(55.f, 96.0f);
+	//triggerCapsule->SetCollisionProfileName("Trigger");
+	//RootComponent = triggerCapsule;
 
-	//Obstacle Mesh
-	obstMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	obstMesh->SetupAttachment(RootComponent);
-	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> ObstacleMesh(TEXT("/Engine/BasicShapes/Cylinder"));
-	UStaticMesh* Asset = ObstacleMesh.Object;
-
-	obstMesh->SetStaticMesh(Asset);*/
+	////Obstacle Mesh
+	//obstMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
+	//obstMesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

@@ -94,11 +94,11 @@ float AMyObstacleSpawnController::generateY(float oldUsedY)
 {
 	float passBack = 0.f;																	// init a variable to the origin 
 
-	passBack = FMath::RandRange(-3000, 3100);												// Random number between -3000 & 3100
+	passBack = FMath::RandRange(-5000, 5000);												// Random number between -3000 & 3100
 
 	passBack = passBack + oldUsedY;															// Add the previous number to the new number
 
-	if (passBack < -3000.f || passBack > 3100.f)											// If that number is less than -3000 or greater than 3100
+	if (passBack < -5000.f || passBack > 5000.f)											// If that number is less than -3000 or greater than 3100
 	{																						// Try and generate a new number and pass it back 
 		passBack = generateY(oldUsedY);
 	}
