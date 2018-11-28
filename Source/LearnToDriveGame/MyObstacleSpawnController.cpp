@@ -26,7 +26,7 @@ void AMyObstacleSpawnController::BeginPlay()
 	
 	// driver function, this will run 100 times on begin play.
 	// starts at 0 and moves to 99 
-	for (int32 i = 0; i < 100; i++)
+	for (int32 i = 0; i <100; i++)
 	{
 		// generate a x for us to use 
 		newX = generateX(newX);
@@ -53,7 +53,7 @@ void AMyObstacleSpawnController::BeginPlay()
 
 			// Create a vector based on our code
 			FVector newVec;											// Create a new Vector for us to use
-			newVec.Set(newX, newY, 112.f);							// set the location to the newX, newY, and 145.f units above the ground
+			newVec.Set(newX, newY, 300.f);							// set the location to the newX, newY, and 145.f units above the ground
 
 			AActor* newActor = GetWorld()->SpawnActor<AMyObstacle>(obstacle, newVec, FRotator::ZeroRotator, spawnParams);
 			
@@ -73,11 +73,11 @@ float AMyObstacleSpawnController::generateX(float oldUsedX)
 {
 	float passBack = 0.f;																	// init a variable to the origin
 
-	passBack = FMath::RandRange(-5000, 5000);												// generate a number between -26500 and 27000 unreal units
+	passBack = FMath::RandRange(-26500.f, 27000.f);												// generate a number between -26500 and 27000 unreal units
 
 	passBack = passBack + oldUsedX;															// set that number to itself plus the old number 
 
-	if (passBack <  -5000.f || passBack > 5000.f)											// if the number is less that -26500 or greater than 27000 
+	if (passBack <  -26500.f || passBack > 27000.f)											// if the number is less that -26500 or greater than 27000 
 	{																						// send a recursive call to create a new one 
 		passBack = generateX(oldUsedX);
 	}
@@ -94,7 +94,7 @@ float AMyObstacleSpawnController::generateY(float oldUsedY)
 {
 	float passBack = 0.f;																	// init a variable to the origin 
 
-	passBack = FMath::RandRange(-5000, 5000);												// Random number between -3000 & 3100
+	passBack = FMath::RandRange(-5000.f, 5000.f);												// Random number between -3000 & 3100
 
 	passBack = passBack + oldUsedY;															// Add the previous number to the new number
 
