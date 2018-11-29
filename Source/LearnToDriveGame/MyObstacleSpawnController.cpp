@@ -14,8 +14,8 @@ AMyObstacleSpawnController::AMyObstacleSpawnController()
 	newY = 0.f;
 
 	// -- Array Set-up -- //
-	oldX.SetNum(100);
-	oldY.SetNum(100);
+	oldX.SetNum(150);
+	oldY.SetNum(150);
 
 }
 
@@ -26,7 +26,7 @@ void AMyObstacleSpawnController::BeginPlay()
 	
 	// driver function, this will run 100 times on begin play.
 	// starts at 0 and moves to 99 
-	for (int32 i = 0; i <100; i++)
+	for (int32 i = 0; i <150; i++)
 	{
 		// generate a x for us to use 
 		newX = generateX(newX);
@@ -93,18 +93,25 @@ float AMyObstacleSpawnController::generateX(float oldUsedX)
 float AMyObstacleSpawnController::generateY(float oldUsedY)
 {
 	float passBack = 0.f;																	// init a variable to the origin 
+	int maxTry = 0;
 
-	passBack = FMath::RandRange(-5000.f, 5000.f);												// Random number between -3000 & 3100
+	if (maxTry >= 50) {
+		return passBack;
+	}
+
+	passBack = FMath::RandRange(-3000.f, 3100.f);												// Random number between -3000 & 3100
 
 	passBack = passBack + oldUsedY;															// Add the previous number to the new number
 
-	if (passBack < -5000.f || passBack > 5000.f)											// If that number is less than -3000 or greater than 3100
+	if (passBack < -3000.f || passBack > 3100.f)											// If that number is less than -3000 or greater than 3100
 	{																						// Try and generate a new number and pass it back 
+		maxTry++;
 		passBack = generateY(oldUsedY);
 	}
 
 	if (!isUsed(oldY, passBack))															// Check if oldY has been used before 
 	{																						// Try and generate a new Y 
+		maxTry++;
 		passBack = generateY(oldUsedY);
 	}
 
@@ -117,7 +124,7 @@ bool AMyObstacleSpawnController::isUsed(TArray<float>& oldArray, float numCheck)
 
 	for (int32 i = 0; i < oldArray.Num(); i++)									// create a for loop to process the array and cycle through each slot
 	{
-		if (distanceBetween(oldArray[i], numCheck) < 50.f)						// if the array's slot number and the newly generated number are less 
+		if (distanceBetween(oldArray[i], numCheck) < 25.f)						// if the array's slot number and the newly generated number are less 
 		{																		// than 50 units apart trip the flag to false
 			flag = false;
 		}
