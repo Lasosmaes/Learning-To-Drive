@@ -3,6 +3,10 @@
 #include "MyObstacle.h"
 #include "Components/CapsuleComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "TimerManager.h"
+
+
 
 // Sets default values
 AMyObstacle::AMyObstacle()
@@ -24,18 +28,12 @@ AMyObstacle::AMyObstacle()
 	//obstMesh->SetupAttachment(RootComponent);
 }
 
-void AMyObstacle::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
-{
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
-	{
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
-	}
-}
-
 // Called when the game starts or when spawned
 void AMyObstacle::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	canLoseTime = true;
 	
 }
 
@@ -46,3 +44,19 @@ void AMyObstacle::Tick(float DeltaTime)
 
 }
 
+void AMyObstacle::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{
+	if (canLoseTime) {
+		if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
+		{
+			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
+			canLoseTime = false;
+			GetWorldTimerManager().SetTimer(CooldownTimerHandle,this, &AMyObstacle::ResetCooldown, 2.0f, false);
+		}
+	}
+}
+
+void AMyObstacle::ResetCooldown()
+{
+	canLoseTime = true;
+}

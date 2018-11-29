@@ -42,6 +42,9 @@ public:
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
 		bool bInReverseGear;
 	
+	//Handle to manage timer
+	FTimerHandle GameTimerHandle;
+
 	// Begin Pawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End Pawn interface
