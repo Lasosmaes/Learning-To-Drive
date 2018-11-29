@@ -11,10 +11,10 @@ class LEARNTODRIVEGAME_API AMyObstacle : public AActor
 {
 	GENERATED_BODY()
 
-	/*UPROPERTY(VisibleAnywhere)
-		class UCapsuleComponent* triggerCapsule;
+	UPROPERTY(VisibleAnywhere)
+		class UCapsuleComponent* capsuleCollider;
 
-	UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	/*UPROPERTY(Category = Mesh, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* obstMesh;*/
 
 
@@ -22,6 +22,8 @@ public:
 	// Sets default values for this actor's properties
 	AMyObstacle();
 
+	UFUNCTION()
+		void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 protected:
 	// Called when the game starts or when spawned

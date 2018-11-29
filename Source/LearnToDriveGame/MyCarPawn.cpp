@@ -4,6 +4,7 @@
 #include "MyCarWheelFront.h"
 #include "MyCarWheelRear.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
@@ -88,8 +89,10 @@ void AMyCarPawn::Tick(float Delta)
 	// Setup the flag to say we are in reverse gear
 	bInReverseGear = GetVehicleMovement()->GetCurrentGear() < 0;
 
-	// Update the strings used in the hud (incar and onscreen)
+	// Update the strings used in the HUD
 	UpdateHUDStrings();
+
+	
 }
 
 void AMyCarPawn::BeginPlay()
@@ -102,7 +105,6 @@ void AMyCarPawn::MoveForward(float Val)
 {
 	GetVehicleMovementComponent()->SetThrottleInput(Val);
 }
-
 
 void AMyCarPawn::MoveRight(float Val)
 {

@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MyObstacle.h"
-#include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
@@ -11,15 +10,26 @@ AMyObstacle::AMyObstacle()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	////Collision Capsule
-	//triggerCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Component"));
-	//triggerCapsule->InitCapsuleSize(55.f, 96.0f);
-	//triggerCapsule->SetCollisionProfileName("Trigger");
-	//RootComponent = triggerCapsule;
+	//Collision Capsule
+	capsuleCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Component"));
+	capsuleCollider->InitCapsuleSize(55.f, 96.0f);
+	capsuleCollider->SetNotifyRigidBodyCollision(true);
+	capsuleCollider->BodyInstance.SetCollisionProfileName("BlockAllDynamic");
+	capsuleCollider->OnComponentHit.AddDynamic(this, &AMyObstacle::OnCompHit);
+
+	RootComponent = capsuleCollider;
 
 	////Obstacle Mesh
 	//obstMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 	//obstMesh->SetupAttachment(RootComponent);
+}
+
+void AMyObstacle::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{
+	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
+	{
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
+	}
 }
 
 // Called when the game starts or when spawned

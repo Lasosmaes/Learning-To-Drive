@@ -22,7 +22,7 @@ class LEARNTODRIVEGAME_API AMyCarPawn : public AWheeledVehicle
 	/** Camera component that will be our viewpoint */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		UCameraComponent* Camera;
-	
+
 public:
 	AMyCarPawn();
 
@@ -56,9 +56,6 @@ public:
 
 	/** Handle pressing forwards */
 	void MoveForward(float Val);
-
-	/** Update the physics material used by the vehicle mesh */
-	/*void UpdatePhysicsMaterial();*/
 	/** Handle pressing right */
 	void MoveRight(float Val);
 	/** Handle handbrake pressed */
