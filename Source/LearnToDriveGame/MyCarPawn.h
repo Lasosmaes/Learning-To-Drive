@@ -14,7 +14,10 @@ UCLASS()
 class LEARNTODRIVEGAME_API AMyCarPawn : public AWheeledVehicle
 {
 	GENERATED_BODY()
-	
+
+	/*UPROPERTY(VisibleAnywhere, Category = "Trigger Capsule")
+		class UCapsuleComponent* triggerCapsule;*/
+
 	/** Spring arm that will offset the camera */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		USpringArmComponent* SpringArm;
@@ -26,27 +29,35 @@ class LEARNTODRIVEGAME_API AMyCarPawn : public AWheeledVehicle
 public:
 	AMyCarPawn();
 
+	//HUD
 	/** The current speed as a string e.g. 10 km/h */
 	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadOnly)
 		FText SpeedDisplayString;
-
 	/** The current gear as a string (R,N, 1,2 etc) */
 	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadOnly)
 		FText GearDisplayString;
-
 	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadOnly)
 		/** The color of the in-car gear text in forward gears */
 		FColor	GearDisplayColor;
+	/** The current time remaining as a string e.g. 10s */
+	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadOnly)
+		FText TimerDisplayString;
 
 	/** Are we in reverse gear */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
 		bool bInReverseGear;
+
+	//Check if player died
+	bool isPlayerDead;
 
 	//Handle to manage timer
 	FTimerHandle GameTimerHandle;
 
 	//Controller
 	AController* controller;
+
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadOnly)
+		float startTime;
 
 	//Current player 'life' time remaining
 	UPROPERTY(Category = Gameplay, VisibleAnywhere, BlueprintReadOnly)
@@ -55,6 +66,9 @@ public:
 	//Time to reduce by when collision occurs
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadOnly)
 		float timeReduction;
+	//Time to reduce by when collision occurs
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadOnly)
+		float timeAddition;
 
 	// Begin Pawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -63,6 +77,10 @@ public:
 	//Blueprint delegate events
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void TimeIsReduced();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void PlayerDied();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void PlayerCompleted();
 
 	// Begin Actor interface
 	virtual void Tick(float Delta) override;
@@ -84,6 +102,14 @@ public:
 
 	//Reduce player 'life' time
 	void ReduceTime();
+	//Add to player 'life' time
+	void AddTime();
+
+	//Player won
+	void PlayerWin();
+
+	/*UFUNCTION()
+		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);*/
 
 private:
 	/** Update the gear and speed strings */
@@ -91,6 +117,7 @@ private:
 
 	//Kill player
 	void PlayerDeath();
+	
 
 	/* Are we on a 'slippery' surface */
 	bool bIsLowFriction;

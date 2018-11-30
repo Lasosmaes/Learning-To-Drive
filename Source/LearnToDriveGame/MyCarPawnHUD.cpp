@@ -51,6 +51,11 @@ void AMyCarPawnHUD::DrawHUD()
 			SpeedTextItem.Scale = ScaleVec;
 			Canvas->DrawItem(SpeedTextItem);
 
+			//Game Timer
+			FCanvasTextItem TimerTextItem(FVector2D(HUDXRatio * 805.f, HUDYRatio * 500), Vehicle->TimerDisplayString, HUDFont, FLinearColor::White);
+			TimerTextItem.Scale = ScaleVec;
+			Canvas->DrawItem(TimerTextItem);
+
 			// Gear
 			/*FCanvasTextItem GearTextItem(FVector2D(HUDXRatio * 805.f, HUDYRatio * 500.f), Vehicle->GearDisplayString, HUDFont, Vehicle->bInReverseGear == false ? Vehicle->GearDisplayColor : Vehicle->GearDisplayReverseColor);
 			GearTextItem.Scale = ScaleVec;

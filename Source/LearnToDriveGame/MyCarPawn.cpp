@@ -4,7 +4,7 @@
 #include "MyCarWheelFront.h"
 #include "MyCarWheelRear.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
@@ -27,6 +27,10 @@ AMyCarPawn::AMyCarPawn()
 
 	static ConstructorHelpers::FClassFinder<UObject> AnimBPClass(TEXT("/Game/Vehicle/Sedan/Sedan_AnimBP"));
 	GetMesh()->SetAnimInstanceClass(AnimBPClass.Class);
+
+	/*triggerCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Trigger Capsule"));
+	triggerCapsule->InitCapsuleSize(55.f, 96.0f);;
+	triggerCapsule->SetCollisionProfileName(TEXT("Trigger"));*/
 
 	// Simulation
 	UWheeledVehicleMovementComponent4W* Vehicle4W = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovement());
@@ -66,6 +70,8 @@ AMyCarPawn::AMyCarPawn()
 	Camera->bUsePawnControlRotation = false;
 	Camera->FieldOfView = 90.f;
 
+	/*triggerCapsule->OnComponentBeginOverlap.AddDynamic(this, &AMyCarPawn::OnOverlapBegin);*/
+
 	bInReverseGear = false;
 }
 
@@ -83,10 +89,6 @@ void AMyCarPawn::SetupPlayerInputComponent(UInputComponent * InputComponent)
 	InputComponent->BindAction("Handbrake", IE_Released, this, &AMyCarPawn::OnHandbrakeReleased);
 }
 
-void AMyCarPawn::TimeIsReduced_Implementation()
-{
-}
-
 void AMyCarPawn::Tick(float Delta)
 {
 	Super::Tick(Delta);
@@ -98,20 +100,22 @@ void AMyCarPawn::Tick(float Delta)
 	UpdateHUDStrings();
 
 	currentTime = GetWorld()->GetTimerManager().GetTimerRemaining(GameTimerHandle);	//Check current time
-	if (currentTime >= 0.0f) 
+	/*if (currentTime >= 0.0f) 
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Time left: %f"), currentTime));
-	}
+	}*/
 }
 
 void AMyCarPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	isPlayerDead = false;
 	timeReduction = 5.0f;
+	timeAddition = 5.0f;
 
 	//Player 'life' timer
-	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 40.0f, false);
+	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, startTime, false);
 }
 
 void AMyCarPawn::MoveForward(float Val)
@@ -139,8 +143,12 @@ void AMyCarPawn::UpdateHUDStrings()
 	float KPH = FMath::Abs(GetVehicleMovement()->GetForwardSpeed()) * 0.036f;
 	int32 KPH_int = FMath::FloorToInt(KPH);
 
+	int32 TimeRemaining = FMath::FloorToInt(currentTime);
+
 	// Using FText because this is display text that should be localizable
 	SpeedDisplayString = FText::Format(LOCTEXT("SpeedFormat", "{0} km/h"), FText::AsNumber(KPH_int));
+
+	TimerDisplayString = FText::Format(LOCTEXT("Time Remaining", "{0} s"), FText::AsNumber(TimeRemaining));
 
 	if (bInReverseGear == true)
 	{
@@ -155,7 +163,7 @@ void AMyCarPawn::UpdateHUDStrings()
 
 void AMyCarPawn::PlayerDeath()
 {
-	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Time ran out: Player died")));
+	//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Time ran out: Player died")));
 
 	AController* controller = GetController();
 
@@ -165,6 +173,22 @@ void AMyCarPawn::PlayerDeath()
 	}
 
 	GetWorldTimerManager().ClearTimer(GameTimerHandle);
+
+	isPlayerDead = true;	//Player has died
+	PlayerDied();	//Show failure widget
+}
+
+void AMyCarPawn::PlayerWin()
+{
+	AController* controller = GetController();
+
+	if (controller != NULL)
+	{
+		controller->UnPossess();	//'Kill' player
+	}
+
+	GetWorldTimerManager().ClearTimer(GameTimerHandle);
+	PlayerCompleted();
 }
 
 void AMyCarPawn::ReduceTime()
@@ -179,6 +203,34 @@ void AMyCarPawn::ReduceTime()
 		GetWorldTimerManager().ClearTimer(GameTimerHandle);
 		PlayerDeath();
 	}
+}
+
+void AMyCarPawn::AddTime()
+{
+	if (GetWorldTimerManager().GetTimerRemaining(GameTimerHandle) >= timeReduction)												//If remaining time >= time to be reduced, then reduce time
+	{
+		GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, currentTime + timeAddition, false);
+	}
+}
+
+//void AMyCarPawn::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+//{
+//	if (OtherActor && (OtherActor != this) && OtherComp)
+//	{
+//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+//	}
+//}
+
+void AMyCarPawn::TimeIsReduced_Implementation()
+{
+}
+
+void AMyCarPawn::PlayerDied_Implementation()
+{
+}
+
+void AMyCarPawn::PlayerCompleted_Implementation()
+{
 }
 
 #undef LOCTEXT_NAMESPACE
