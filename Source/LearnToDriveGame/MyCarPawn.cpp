@@ -104,9 +104,9 @@ void AMyCarPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 10.0f, false);
-	
-	
+	timeReduction = 5.0f;
+
+	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 30.0f, false);
 }
 
 void AMyCarPawn::MoveForward(float Val)
@@ -156,10 +156,21 @@ void AMyCarPawn::PlayerDeath()
 
 	if (controller != NULL) 
 	{
-		controller->UnPossess();
+		controller->UnPossess();	//'Kill' player
 	}
-	
-	return;
+}
+
+void AMyCarPawn::ReduceTime()
+{
+	if (GetWorldTimerManager().GetTimerRemaining(GameTimerHandle) >= timeReduction)												//If remaining time >= time to be reduced, then reduce time
+	{
+		GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, currentTime - timeReduction, false);
+	}																															//If remaining time < time to be reduced, clear timer and kill player
+	else
+	{
+		GetWorldTimerManager().ClearTimer(GameTimerHandle);
+		PlayerDeath();
+	}
 }
 
 #undef LOCTEXT_NAMESPACE

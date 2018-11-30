@@ -50,6 +50,9 @@ public:
 	UPROPERTY(Category = Gameplay, VisibleAnywhere, BlueprintReadOnly)
 		float currentTime;
 
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadOnly)
+		float timeReduction;
+
 	// Begin Pawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End Pawn interface
@@ -70,6 +73,8 @@ public:
 	void OnHandbrakePressed();
 	/** Handle handbrake released */
 	void OnHandbrakeReleased();
+
+	void ReduceTime();
 
 private:
 	/** Update the gear and speed strings */

@@ -32,7 +32,7 @@ AMyObstacle::AMyObstacle()
 void AMyObstacle::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	canLoseTime = true;
 	
 }
@@ -51,7 +51,12 @@ void AMyObstacle::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, 
 		{
 			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
 			canLoseTime = false;
-			GetWorldTimerManager().SetTimer(CooldownTimerHandle,this, &AMyObstacle::ResetCooldown, 2.0f, false);
+			GetWorldTimerManager().SetTimer(CooldownTimerHandle, this, &AMyObstacle::ResetCooldown, 2.0f, false);
+			Cast<AMyCarPawn>(OtherActor)->ReduceTime();
+			if (carPawn != NULL)
+			{
+				carPawn->ReduceTime();
+			}
 		}
 	}
 }
