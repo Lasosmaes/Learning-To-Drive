@@ -20,16 +20,21 @@ class LEARNTODRIVEGAME_API AMyObstacle : public AActor
 
 	AMyCarPawn* carPawn;
 
+	//Is collision cooldown active
 	bool canLoseTime;
+
+	//Handle to manage timer
 	FTimerHandle CooldownTimerHandle;
 
 public:	
 	// Sets default values for this actor's properties
 	AMyObstacle();
 
+	//Collision detection
 	UFUNCTION()
 		void OnCompHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	//Reset collision cooldown
 	UFUNCTION()
 		void ResetCooldown();
 

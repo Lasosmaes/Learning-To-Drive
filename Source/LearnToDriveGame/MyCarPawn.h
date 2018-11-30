@@ -45,11 +45,14 @@ public:
 	//Handle to manage timer
 	FTimerHandle GameTimerHandle;
 
+	//Controller
 	AController* controller;
 
+	//Current player 'life' time remaining
 	UPROPERTY(Category = Gameplay, VisibleAnywhere, BlueprintReadOnly)
 		float currentTime;
 
+	//Time to reduce by when collision occurs
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadOnly)
 		float timeReduction;
 
@@ -57,8 +60,13 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End Pawn interface
 
+	//Blueprint delegate events
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void TimeIsReduced();
+
 	// Begin Actor interface
 	virtual void Tick(float Delta) override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -74,12 +82,14 @@ public:
 	/** Handle handbrake released */
 	void OnHandbrakeReleased();
 
+	//Reduce player 'life' time
 	void ReduceTime();
 
 private:
 	/** Update the gear and speed strings */
 	void UpdateHUDStrings();
 
+	//Kill player
 	void PlayerDeath();
 
 	/* Are we on a 'slippery' surface */

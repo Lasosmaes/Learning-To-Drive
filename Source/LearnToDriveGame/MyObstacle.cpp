@@ -53,9 +53,13 @@ void AMyObstacle::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, 
 			canLoseTime = false;
 			GetWorldTimerManager().SetTimer(CooldownTimerHandle, this, &AMyObstacle::ResetCooldown, 2.0f, false);
 			Cast<AMyCarPawn>(OtherActor)->ReduceTime();
+
 			if (carPawn != NULL)
 			{
-				carPawn->ReduceTime();
+				if (carPawn->GetWorldTimerManager().IsTimerActive(carPawn->GameTimerHandle))
+				{
+					carPawn->ReduceTime();
+				}
 			}
 		}
 	}

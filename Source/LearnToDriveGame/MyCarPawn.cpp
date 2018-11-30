@@ -83,6 +83,10 @@ void AMyCarPawn::SetupPlayerInputComponent(UInputComponent * InputComponent)
 	InputComponent->BindAction("Handbrake", IE_Released, this, &AMyCarPawn::OnHandbrakeReleased);
 }
 
+void AMyCarPawn::TimeIsReduced_Implementation()
+{
+}
+
 void AMyCarPawn::Tick(float Delta)
 {
 	Super::Tick(Delta);
@@ -93,7 +97,7 @@ void AMyCarPawn::Tick(float Delta)
 	// Update the strings used in the HUD
 	UpdateHUDStrings();
 
-	currentTime = GetWorld()->GetTimerManager().GetTimerRemaining(GameTimerHandle);
+	currentTime = GetWorld()->GetTimerManager().GetTimerRemaining(GameTimerHandle);	//Check current time
 	if (currentTime >= 0.0f) 
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Time left: %f"), currentTime));
@@ -106,7 +110,8 @@ void AMyCarPawn::BeginPlay()
 
 	timeReduction = 5.0f;
 
-	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 30.0f, false);
+	//Player 'life' timer
+	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 40.0f, false);
 }
 
 void AMyCarPawn::MoveForward(float Val)
@@ -158,6 +163,8 @@ void AMyCarPawn::PlayerDeath()
 	{
 		controller->UnPossess();	//'Kill' player
 	}
+
+	GetWorldTimerManager().ClearTimer(GameTimerHandle);
 }
 
 void AMyCarPawn::ReduceTime()
@@ -165,6 +172,7 @@ void AMyCarPawn::ReduceTime()
 	if (GetWorldTimerManager().GetTimerRemaining(GameTimerHandle) >= timeReduction)												//If remaining time >= time to be reduced, then reduce time
 	{
 		GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, currentTime - timeReduction, false);
+		TimeIsReduced();
 	}																															//If remaining time < time to be reduced, clear timer and kill player
 	else
 	{
