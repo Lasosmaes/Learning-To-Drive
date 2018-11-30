@@ -45,6 +45,8 @@ public:
 	//Handle to manage timer
 	FTimerHandle GameTimerHandle;
 
+	AController* controller;
+
 	UPROPERTY(Category = Gameplay, VisibleAnywhere, BlueprintReadOnly)
 		float currentTime;
 

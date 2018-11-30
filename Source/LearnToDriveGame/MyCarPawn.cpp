@@ -94,15 +94,18 @@ void AMyCarPawn::Tick(float Delta)
 	UpdateHUDStrings();
 
 	currentTime = GetWorld()->GetTimerManager().GetTimerRemaining(GameTimerHandle);
-	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %f"), currentTime));
-	
+	if (currentTime >= 0.0f) 
+	{
+		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Time left: %f"), currentTime));
+	}
 }
 
 void AMyCarPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 40.0f, false);
+	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 10.0f, false);
+	
 	
 }
 
@@ -148,6 +151,14 @@ void AMyCarPawn::UpdateHUDStrings()
 void AMyCarPawn::PlayerDeath()
 {
 	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Time ran out: Player died")));
+
+	AController* controller = GetController();
+
+	if (controller != NULL) 
+	{
+		controller->UnPossess();
+	}
+	
 	return;
 }
 
