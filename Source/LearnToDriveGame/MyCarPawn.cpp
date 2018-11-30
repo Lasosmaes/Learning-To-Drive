@@ -11,6 +11,7 @@
 #include "WheeledVehicleMovementComponent4W.h"
 #include "Engine/SkeletalMesh.h"
 #include "Engine/Engine.h"
+#include "TimerManager.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/TextRenderComponent.h"
 #include "Materials/Material.h"
@@ -92,6 +93,8 @@ void AMyCarPawn::Tick(float Delta)
 	// Update the strings used in the HUD
 	UpdateHUDStrings();
 
+	currentTime = GetWorld()->GetTimerManager().GetTimerRemaining(GameTimerHandle);
+	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %f"), currentTime));
 	
 }
 
@@ -99,6 +102,8 @@ void AMyCarPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, 40.0f, false);
+	
 }
 
 void AMyCarPawn::MoveForward(float Val)
@@ -138,6 +143,12 @@ void AMyCarPawn::UpdateHUDStrings()
 		int32 Gear = GetVehicleMovement()->GetCurrentGear();
 		GearDisplayString = (Gear == 0) ? LOCTEXT("N", "N") : FText::AsNumber(Gear);
 	}
+}
+
+void AMyCarPawn::PlayerDeath()
+{
+	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Time ran out: Player died")));
+	return;
 }
 
 #undef LOCTEXT_NAMESPACE

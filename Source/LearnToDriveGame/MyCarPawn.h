@@ -41,9 +41,12 @@ public:
 	/** Are we in reverse gear */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
 		bool bInReverseGear;
-	
+
 	//Handle to manage timer
 	FTimerHandle GameTimerHandle;
+
+	UPROPERTY(Category = Gameplay, VisibleAnywhere, BlueprintReadOnly)
+		float currentTime;
 
 	// Begin Pawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -69,6 +72,8 @@ public:
 private:
 	/** Update the gear and speed strings */
 	void UpdateHUDStrings();
+
+	void PlayerDeath();
 
 	/* Are we on a 'slippery' surface */
 	bool bIsLowFriction;
