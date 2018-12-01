@@ -81,6 +81,8 @@ public:
 		void PlayerDied();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		void PlayerCompleted();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+		void BeginTutUI();
 
 	// Begin Actor interface
 	virtual void Tick(float Delta) override;

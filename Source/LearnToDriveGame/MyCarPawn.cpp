@@ -116,6 +116,7 @@ void AMyCarPawn::BeginPlay()
 
 	//Player 'life' timer
 	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &AMyCarPawn::PlayerDeath, startTime, false);
+	BeginTutUI();
 }
 
 void AMyCarPawn::MoveForward(float Val)
@@ -230,6 +231,10 @@ void AMyCarPawn::PlayerDied_Implementation()
 }
 
 void AMyCarPawn::PlayerCompleted_Implementation()
+{
+}
+
+void AMyCarPawn::BeginTutUI_Implementation()
 {
 }
 
