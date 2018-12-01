@@ -49,7 +49,7 @@ void AMyObstacle::OnCompHit(UPrimitiveComponent * HitComp, AActor * OtherActor, 
 	if (canLoseTime) {
 		if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
 		{
-			if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
+			//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
 			canLoseTime = false;
 			GetWorldTimerManager().SetTimer(CooldownTimerHandle, this, &AMyObstacle::ResetCooldown, 2.0f, false);
 			Cast<AMyCarPawn>(OtherActor)->ReduceTime();

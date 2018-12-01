@@ -42,7 +42,7 @@ void AMyTimePickup::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cl
 {
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherActor == carPawn))
 	{
-		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap")));
+		//if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Overlap")));
 		Cast<AMyCarPawn>(OtherActor)->AddTime();
 
 		if (carPawn != NULL)
